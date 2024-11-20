@@ -19,6 +19,9 @@ public class Activity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany(mappedBy = "activity")
+    List<Session> sessions = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(name = "tb_activity_participant", joinColumns = @JoinColumn(name = "activity_id"),
             inverseJoinColumns = @JoinColumn(name = "participant_id"))
@@ -74,12 +77,12 @@ public class Activity {
         this.category = category;
     }
 
-    public void setParticipants(Set<Participant> participants) {
-        this.participants = participants;
-    }
-
     public Set<Participant> getParticipants() {
         return participants;
+    }
+
+    public List<Session> getSessions() {
+        return sessions;
     }
 
     @Override
