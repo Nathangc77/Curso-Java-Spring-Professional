@@ -38,8 +38,21 @@ public class ClientService {
         return new ClientDTO(entity);
     }
 
+    @Transactional
+    public ClientDTO update(Long id, ClientDTO dto) {
+        Client entity = clientRepository.getReferenceById(id);
+        copyDtoToEntity(dto, entity);
+        entity = clientRepository.save(entity);
+        return new ClientDTO(entity);
+    }
+
     private void copyDtoToEntity(ClientDTO dto, Client entity) {
-        BeanUtils.copyProperties(dto, entity);
+        //BeanUtils.copyProperties(dto, entity);
+        entity.setName(dto.getName());
+        entity.setCpf(dto.getCpf());
+        entity.setIncome(dto.getIncome());
+        entity.setBirthDate(dto.getBirthDate());
+        entity.setChildren(dto.getChildren());
     }
 
 }
