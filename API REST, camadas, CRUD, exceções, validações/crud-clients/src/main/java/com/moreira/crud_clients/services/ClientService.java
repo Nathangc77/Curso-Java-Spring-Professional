@@ -46,6 +46,10 @@ public class ClientService {
         return new ClientDTO(entity);
     }
 
+    public void delete(Long id) {
+        clientRepository.deleteById(id);
+    }
+
     private void copyDtoToEntity(ClientDTO dto, Client entity) {
         //BeanUtils.copyProperties(dto, entity);
         entity.setName(dto.getName());
