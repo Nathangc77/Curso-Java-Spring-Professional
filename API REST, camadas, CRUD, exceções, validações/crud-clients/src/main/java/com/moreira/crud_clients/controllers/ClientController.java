@@ -2,6 +2,7 @@ package com.moreira.crud_clients.controllers;
 
 import com.moreira.crud_clients.dto.ClientDTO;
 import com.moreira.crud_clients.services.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +27,12 @@ public class ClientController {
     }
 
     @PostMapping
-    public ClientDTO insert(@RequestBody ClientDTO dto) {
+    public ClientDTO insert(@Valid @RequestBody ClientDTO dto) {
         return dto = clientService.insert(dto);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ClientDTO> update(@PathVariable Long id, @RequestBody ClientDTO dto) {
+    public ResponseEntity<ClientDTO> update(@PathVariable Long id, @Valid @RequestBody ClientDTO dto) {
         dto = clientService.update(id, dto);
         return ResponseEntity.ok(dto);
     }
