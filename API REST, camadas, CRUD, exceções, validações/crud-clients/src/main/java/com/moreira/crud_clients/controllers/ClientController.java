@@ -8,6 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/clients")
@@ -17,18 +20,25 @@ public class ClientController {
     private ClientService clientService;
 
     @GetMapping
-    public Page<ClientDTO> findAll(Pageable page) {
-        return clientService.findAll(page);
+    public ResponseEntity<Page<ClientDTO>> findAll(Pageable page) {
+        Page<ClientDTO> dtoPage = clientService.findAll(page);
+        return ResponseEntity.ok(dtoPage);
     }
 
     @GetMapping(value = "/{id}")
-    public ClientDTO findById(@PathVariable Long id) {
-        return clientService.findById(id);
+    public ResponseEntity<ClientDTO> findById(@PathVariable Long id) {
+        ClientDTO dto = clientService.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public ClientDTO insert(@Valid @RequestBody ClientDTO dto) {
-        return dto = clientService.insert(dto);
+    public ResponseEntity<ClientDTO> insert(@Valid @RequestBody ClientDTO dto) {
+        dto = clientService.insert(dto);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(dto);
     }
 
     @PutMapping(value = "/{id}")
@@ -38,7 +48,8 @@ public class ClientController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         clientService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
